@@ -1,0 +1,191 @@
+---
+title: "Practice with DataFrame"
+output:
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+```{r}
+
+DFpatient=read.csv('emergency.csv')
+
+```
+```{r}
+str(DFpatient)
+```
+```{r}
+mylist=list('srikaran',5,c(20,40,60))
+
+```
+
+```{r}
+str(mylist)
+```
+
+```{r}
+str(mylist[3])
+```
+
+```{r}
+DFpatient$Condition
+```
+
+```{r}
+DFpatient[['Condition']] #same as above
+
+```
+
+```{r}
+DFpatient['Condition']
+```
+
+```{r}
+str(DFpatient['Condition'])
+```
+
+```{r}
+DFpatient[2]
+```
+
+```{r}
+DFpatient[,'Condition']
+```
+
+```{r}
+DFpatient$Condition == 'serious'
+```
+
+```{r}
+DFpatient[DFpatient$Condition == 'serious',]
+```
+
+```{r}
+sum(DFpatient$Condition == 'serious')
+```
+
+```{r}
+mean(DFpatient$Condition=='serious')*100
+```
+
+```{r}
+sum(DFpatient$Insurance == 'not insured')
+```
+
+```{r}
+sum(DFpatient$Insurance == 'not insured',DFpatient$Condition == 'serious')
+```
+
+```{r}
+mean(DFpatient$Insurance == 'not insured')
+```
+
+```{r}
+DFpatient=read.csv('emergency.csv',row.names = 1, stringsAsFactors = TRUE)
+```
+
+```{r}
+str(DFpatient)
+```
+
+```{r}
+DFpatient$Condition = factor(DFpatient$Condition)
+```
+
+```{r}
+str(DFpatient)
+```
+
+```{r}
+DFpatient$Insurance = factor(DFpatient$Insurance)
+
+```
+
+```{r}
+str(DFpatient)
+```
+
+```{r}
+categorial_cols = c('Condition', 'Insurance')
+```
+
+```{r}
+lapply(DFpatient[,categorial_cols],factor)
+```
+
+```{r}
+str(DFpatient[,categorial_cols])
+```
+
+```{r}
+DFpatient[,categorial_cols] = lapply(DFpatient[,categorial_cols],factor)
+```
+
+```{r}
+str(lapply(DFpatient[,categorial_cols],factor))
+```
+
+```{r}
+mean(DFpatient$Insurance=='insured')*100
+```
+
+```{r}
+DFpatient[DFpatient$Condition== 'serious',]$Insurance == 'insured'
+```
+
+```{r}
+sum(DFpatient[DFpatient$Condition== 'serious',]$Insurance == 'insured')
+```
+
+```{r}
+mean(DFpatient[DFpatient$Condition== 'serious',]$Insurance == 'insured')
+```
+
+```{r}
+DFpatient$Condition== 'serious'& DFpatient$Insurance == 'insured'
+```
+
+```{r}
+DFpatient$Condition== 'serious'| DFpatient$Insurance == 'insured'
+```
+
+```{r}
+sum(DFpatient$Condition== 'serious'& DFpatient$Insurance == 'insured')
+```
+
+```{r}
+sum(DFpatient$Condition== 'serious'| DFpatient$Insurance == 'insured')
+```
+
+```{r}
+mean(DFpatient$Condition== 'serious'& DFpatient$Insurance == 'insured')
+```
+
+```{r}
+mean(DFpatient$Condition== 'serious'| DFpatient$Insurance == 'insured')
+```
+
+```{r}
+mean(DFpatient$Condition== 'serious'& DFpatient$Insurance == 'insured')/mean(DFpatient$Insurance=='insured')
+```
+
+```{r}
+mean(DFpatient[DFpatient$Insurance=='insured',]$Condition=='serious')
+```
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+

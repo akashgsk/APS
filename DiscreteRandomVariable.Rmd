@@ -1,0 +1,224 @@
+---
+title: "disranvar"
+output: html_document
+date: "2023-10-03"
+---
+
+#An oil companany has 20% chance of striking oil when drilling a well. What is the probability the company strikes 5 oil out of next 10 attempts?
+
+```{r}
+n=10
+p=0.2
+dbinom(5,n,p)
+```
+# An oil companany has 20% chance of striking oil when drilling a well. What is the probability the company strikes 5 oil out of next 10 attempts?
+
+```{r}
+n=10
+p=0.2
+sum(dbinom(0:5,n,p))
+pbinom(5,n,p)
+
+```
+# Approximately 42% of people have type o blood. On a given day in a blood bank, 120 people arrive to donate blood. What is the probability that 30 of those 120 ppl have type o blood?
+
+```{r}
+n=120
+p=0.42
+j=30 #P(x=30)  #Refer notes
+dbinom(j,n,p)
+
+Nsuccess = 42000
+Nfailure = 58000
+n=120
+j=30
+dhyper(j,Nsuccess,Nfailure,n)
+
+```
+# An oil companany has 20% chance of striking oil when drilling a well. What is the probability the company drills 7 times to strike oil the 3rd time?
+
+```{r}
+dbinom(3,4,0.99)
+dhyper(3,9900,100,4) #cummulative prob #without replacement
+
+```
+
+```{r}
+#(1) Sample size is small compared to population size (condition 1 not satisfied)
+#(2) Sample 
+dbinom(4,9000,0.4)
+dhyper(4,4000,6000,9000)
+
+```
+
+```{r}
+p = 0.2
+r = 3
+j = 7
+dbinom(j-r,j,p) #point prob #j-r if binomial is in negative
+
+
+```
+
+```{r}
+p = 0.2
+r = 20
+j = 100
+dbinom(r,j,p)
+
+```
+# 48/50 Defective items in a box. 
+```{r}
+
+nsuccess = 48
+nfailure = 2
+n = 45
+1-dhyper(0,nsuccess,nfailure,n)
+
+
+n = 45
+p = 48/50
+1-dbinom(0,n,p)
+```
+# Telephone Survey
+```{r}
+
+p = 0.1
+r = 4
+j = 10
+dbinom(j-r,j,p)
+```
+#stoplight
+```{r}
+p = 0.31
+n = 8
+j=5:n
+#dbinom(j,n,p)+dbinom(j+1,n,p)+dbinom(j+2,n,p)+dbinom(j+3,n,p) or
+sum(dbinom(j,n,p))
+```
+
+```{r}
+j=4
+pbinom(j,n,p) # x<=4, P(x-0)+....P(x-4)
+1-pbinom(j,n,p) #cummulative distributive function
+```
+
+```{r}
+n=4
+p=4/10
+j=2
+dbinom(j,n,p)   # Exactly 2
+pbinom(j,n,p)   # At most 2  # j=0,1,2
+j=1             # x<=1
+1-pbinom(j,n,p) # At least 2
+
+```
+
+```{r}
+simulatedData = rbinom(1000,n,p)
+simulatedData
+mean(simulatedData == 2) # Exactly
+dbinom(2,n,p)
+mean(simulatedData <= 2) # At Most
+pbinom(2,n,p)
+mean(simulatedData >= 2) # At Least
+1-pbinom(1,n,p)
+
+
+```
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+
+
+```{r}
+n=4
+p=0.4
+nsimulations=1e5
+```
+
+
+```{r}
+simulations=rbinom(nsimulations,n,p)
+table(simulations)
+
+```
+```{r}
+dfBinom = as.data.frame(table(simulations))
+dfBinom
+
+```
+```{r}
+colnames(dfBinom) = c('j','Freq')
+dfBinom['Prob'] = dfBinom['Freq'] / nsimulations
+
+```
+
+```{r}
+p = ggplot(data = dfBinom) + 
+    geom_col(aes(x = j, y = Prob), width =0.1, fill = 'blue') +
+    ggtitle('Probability Mass Function (PMF) of X~Bin(n = 4, p = 0.4)') +
+    theme_minimal()
+p
+
+```
+
+```{r}
+
+dfBinom['Cumprob'] = cumsum(dfBinom['Prob'])
+dfBinom['Cumprob']
+
+```
+```{r}
+dfBinom
+```
+
+
+```{r}
+colnames(dfBinom) = c('j','Freq')
+dfBinom['Prob'] = dfBinom['Freq'] / nsimulations
+dfBinom["CumProb"]=cumsum(dfBinom['Prob'])
+
+```
+
+```{r}
+q = ggplot(data = dfBinom) + 
+    geom_col(aes(x = j, y = CumProb), width =0.1, fill = 'red') +
+    ggtitle('Cummulative Distributive Frequency (CDF) of X~Bin(n = 4, p = 0.4)') +
+    theme_minimal()
+q
+
+```
+
+```{r}
+n=4
+p=0.4
+nsimulations=1e5
+simulatedData=rbinom(nsimulations,n,p)
+mean(simulatedData)
+sum(simulatedData) / nsimulations
+```
+
+
+```{r}
+(0*(sum(simulatedData == 0)/nsimulations) + 1*(sum(simulatedData == 1)/nsimulations) + 
+2*(sum(simulatedData == 2)/nsimulations) + 3*(sum(simulatedData == 3)/nsimulations) +
+4*(sum(simulatedData == 4)/nsimulations))
+
+```
+
+
+```{r}
+n=40
+j=3
+Nsuccess=4
+Nfailure=48
+dhyper(j,Nsuccess,Nfailure,n)
+
+```
+```{r}
+
+
+```
+

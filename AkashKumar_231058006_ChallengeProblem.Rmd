@@ -1,0 +1,77 @@
+---
+title: "Bus_problem"
+author: '"Akash","Sohan","Anvit","Sujana"'
+date: "2023-09-04"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+#### Using the following model for a bus-ridership analysis
+
+#### At each stop, each passenger is likely to get off the bus independent of others with a 20% chance
+
+#### At every stop, there is a 50%/40%/10% chance of 0/1/2 passengers getting on board
+
+#### Bus is empty when it arrives at the first stop
+
+
+```{r}
+entering_bus = function() {
+  
+  return(sample(c(0,1,2),size = 1,prob = c(0.50,0.40,0.10)))
+}
+
+exiting_bus = function(number_prev){
+  
+  return(sum(sample(c(1,0),size =number_prev ,replace = TRUE, prob = c(0.20,0.80))))
+}
+
+```
+
+
+#### Code to calculate using simulation, the probability that the bus is empty after visiting the 10th stop
+
+
+```{r}
+bus_10Passenger = function() {
+  bus_seat=c()
+  for (j in c(1:10)) {
+    if (j == 1) {
+      bus_seat=c(bus_seat,entering_bus())
+    }
+    else if(bus_seat[j-1]==0){
+    bus_seat=c(bus_seat,entering_bus()) 
+    }
+    else {
+    bus_seat=c(bus_seat,bus_seat[j-1]+entering_bus()-exiting_bus(bus_seat[j-1]))
+    }
+  }
+  return(bus_seat)
+}
+
+```
+
+
+#### Simulating 10000  people entering and exiting the bus
+
+```{r}
+nsimuationss=10000
+simulatedData = replicate(nsimuationss,bus_10Passenger())
+```
+
+
+#### Count of 0 entries at 10th stop
+
+```{r}
+table(simulatedData[10,])
+```
+
+
+#### Bus is empty at 10th Stop
+
+
+```{r}
+sum(simulatedData[10,]==0)/length(simulatedData[10,])
+```
+

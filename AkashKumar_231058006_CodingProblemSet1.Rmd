@@ -1,0 +1,33 @@
+---
+title: "AkashKumar_231058006_CodingProblemSet1"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+date: "2023-08-24"
+---
+
+```{r}
+ebola_virus=read.csv("bats.csv")
+```
+
+```{r}
+str(ebola_virus)
+```
+
+```{r}
+ebola_virus$Bat
+```
+```{r}
+#Chances of a Random Bat Carrying Ebola Virus
+mean(ebola_virus$Bat)
+```
+```{r}
+#Likelihood expressed in random bat for each gene
+sapply(ebola_virus[,2:5],mean)*100
+```
+```{r}
+
+```
+

@@ -1,0 +1,177 @@
+---
+title: "Graphing with ggplot"
+output:
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+```{r}
+library(ggplot2)
+```
+
+#### Read Data
+
+```{r}
+foodData = read.csv('food-texture.csv',
+                    header = TRUE, row.names = 1)
+head(foodData)
+```
+
+```{r}
+str(foodData)
+```
+
+```{r}
+nrow(foodData)
+ncol(foodData)
+rownames(foodData)
+colnames(foodData)         
+```
+
+#### Accessing elements of the dataframe
+
+```{r}
+foodData$Oil
+foodData[['Oil']]
+foodData[, 'Oil']
+foodData['Oil']
+```
+
+#### Factor Data structure in R
+
+```{r}
+gender = c('male','female','female','male','female','male','male')
+str(gender)
+print(gender)
+gender_categorical=factor(gender)
+print(gender_categorical)
+str(gender_categorical)
+levels(gender_categorical)
+gender_categorical[1]
+
+```
+
+#### Add a new column called taste with levels (1) poor (2) fair (3) good (4) excellent
+
+```{r}
+#foodData['taste']=sample(c('poor','fair','good','excellent'), nrow(foodData), replace = TRUE, p = c(0.25,0.25,0.25,0.25))
+#head(foodData)
+```
+
+#### write the updated dataframe to food-texture.csv
+
+```{r}
+#write.csv(foodData,'food-texture.csv')
+
+```
+
+#### create list of continuous and categorial feature names
+
+```{r}
+continuous_cols = c('Oil','Density','Fracture','Hardness')
+categorical_cols = c('Crispy', 'taste')
+```
+
+#### convert all categorical coulmns (that we know) into factor type in one shot
+
+```{r}
+foodData[categorical_cols]
+```
+
+
+```{r}
+foodData[categorical_cols] = lapply(foodData[categorical_cols],factor)
+str(foodData)
+```
+
+#### create a ggplot canvas
+
+```{r}
+P = ggplot(data = foodData)
+P
+
+```
+
+#### visualize and understand the relationship between two continous variables using color coding (scatter plot): Oil and Density
+
+```{r}
+P = ggplot(data = foodData) + geom_point(aes(x = Density, y = Oil, color = Crispy))
+P
+
+```
+
+```{r}
+P = ggplot(data = foodData) + geom_point(aes(x = Density, y = Oil, size = Crispy))
+P
+
+```
+
+#### visualize and understand the relationship between a continous and  a categorial feature(box plot): Density and Crispy
+
+```{r}
+P = ggplot(data = foodData) + geom_boxplot(aes(x = Crispy, y = Density))
+P
+```
+
+#### Understand what is inisde a box plot
+
+```{r}
+#foodData$Density
+#foodData$Crispy==10
+#foodData[foodData$Crispy == 10, ]
+#foodData[foodData$Crispy == 10 & foodData$Oil <= 17,]
+density10 = foodData[foodData$Crispy == 10, 'Density']
+density11 = foodData[foodData$Crispy == 11, 'Density']
+#density11 = foodData[foodData$Crispy == 10, c('Density','Hardness')]
+density10
+density10
+
+```
+
+```{r}
+density10                                     #vector
+mean(density10)
+density10 - mean(density10)                   # mean centered value
+(density10 - mean(density10))^2               # squared mean centered
+mean((density10 - mean(density10))^2)         # variance of the density
+sqrt(mean((density10 - mean(density10))^2))   # Standard Deviation
+```
+
+```{r}
+var(density10)
+sd(density10)
+```
+
+```{r}
+var(dfDensity10$Density)
+sd(dfDensity10$Density)
+```
+
+```{r}
+dfDensity10 = data.frame(density10)
+colnames(dfDensity10) = c('Density')
+dfDensity10$DensityMC = density10 - mean(density10)
+dfDensity10$DensityMCs = (dfDensity10$DensityMC)^2
+str(dfDensity10)
+```
+
+```{r}
+#Component plot of mean centered density values of samples with crispy level 10
+p = ggplot(data = dfDensity10) +
+    geom_point(aes(x = c(1:nrow(dfDensity10)), y = DensityMC), color = 'blue') +
+    #geom_line(aes(x = c(1:nrow(dfDensity10)), y = Density), color = 'green') +
+    geom_line(aes(x = c(1:nrow(dfDensity10)), y = mean(DensityMC)), color = 'red') +
+    labs(x = 'Sample Number', y = 'Density (kg/m^3)', title = "Component plot of Density")
+  
+p
+```
+
+```{r}
+#
+lapply(foodData[continuous_cols], scale)
+```
+
+
+

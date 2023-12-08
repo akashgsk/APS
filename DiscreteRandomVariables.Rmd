@@ -1,0 +1,137 @@
+---
+title: "Discrete Random Variables"
+output:
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+
+---
+
+**Scenario**: A salesman has scheduled two appointments to sell software, one in the morning and another one in the afternoon. There are two software editions available: the base edition costing Rs. 5000 and the premium edition costing Rs. 10000. His morning appointments typically lead to a sale with a 30% chance while the afternoon ones typically lead to a sale with a 60% chance independent of what happened in the morning. If the morning appointment ends up in sale, the salesman has a 70% chance of selling the premium edition and if the afternoon appointment ends up in a sale, he is equally likely to sell either of the editions. Let X be the random variable representing the total Rupee value of sales. What are the different values that X can take? Calculate the probability that X takes the value 5000?
+
+---
+
+
+```{r}
+# Sampling space for appointment success (0 corresponds to no sale, 1 corresponds to a sale)
+s_appointment = c(0,1)
+
+# Appointment success and failure probabilities
+p_morning = 0.3 # Success probability of sales in morning
+p_afternoon =  0.6 # Success probability of sales in afternoon
+p_appointment = matrix(nrow = 2, ncol = 2, c(1-p_morning, p_morning, 1-p_afternoon, p_afternoon), byrow = TRUE)
+
+# Sampling space for software type
+s_software = c(0,1)
+
+# Software type probabilities
+p_software = matrix(nrow = 2, ncol = 2, c(0.3,0.7,0.5,0.5), byrow = TRUE)
+
+# Function that simulates one trial of the random experiment which is
+# what the salesman earns on a random day
+salesResult = function(){
+  result = numeric(2)
+  # Simulate whether sales happen in morning and afternoon appointments
+  for (j in c(1:2)){
+    result[j] = sample(s_appointment, size = 1, replace = TRUE, prob = p_appointment[j, ])
+  }
+  earnings = ifelse(result[1] == 1, sample(s_software, size = 1, replace = TRUE, prob = p_software[1, ]), 0) + ifelse(result[2] == 1, sample(s_software,size=1, replace = TRUE, prob = p_software[2, ]), 0)
+  return(earnings)
+}
+```
+
+
+```{r}
+# Number of simulations
+nsimulations = 1e5
+simulatedData = replicate(nsimulations, salesResult())
+simulatedData
+```
+
+
+```{r}
+# Probability that the salesman earns Rs 5000
+mean(simulatedData == 5000)
+
+# Can we calculate all the probabilities in one shot?
+table(simulatedData) / nsimulations
+
+```
+
+```{r}
+as.data.frame(simulatedData)
+```
+
+```{r}
+dfsales = as.data.frame(simulatedData)
+head(dfsales,5)
+```
+
+```{r}
+dfsales = as.data.frame(simulatedData)
+colnames(dfsales)=c('Earnings')
+head(dfsales)
+```
+
+```{r}
+p = ggplot(data=dfsales) + geom_bar(aes(x=Earnings))
+p
+```
+
+```{r}
+
+```
+
+```{r}
+p = ggplot(data = dfsales) + geom_bar(aes(x = Earnings), fill = 'red')
+p
+```
+
+```{r}
+dfsales = as.data.frame(table(simulatedData))
+head(dfsales)
+```
+
+```{r}
+dfsales = as.data.frame(table(simulatedData))
+head(dfsales)
+colnames(dfsales)=c('Earnings','Frequency')
+head(dfsales)
+```
+
+```{r}
+dfsales['Probability'] = dfsales['Frequency'] / nsimulations
+head(dfsales)
+```
+
+```{r}
+dfsales = as.data.frame(table(simulatedData))
+head(dfsales)
+colnames(dfsales)=c('Earnings','Frequency')
+head(dfsales)
+dfsales['Probability'] = dfsales['Frequency'] / nsimulations
+head(dfsales)
+
+```
+
+
+```{r}
+p = ggplot(data = dfsales) + geom_col(aes(x = Earnings,Probability), fill = 'blue')
+p
+```
+
+```{r}
+p = ggplot(data = dfsales) + geom_col(aes(x = Earnings,Probability), fill = 'green', width = 0.5)
+p
+```
+
+
+
+
