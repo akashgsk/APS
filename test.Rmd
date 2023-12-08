@@ -1,0 +1,51 @@
+---
+title: "test"
+output: html_document
+date: "2023-12-08"
+---
+
+```{r}
+#Given
+lambda_human <- 15
+lambda_bot <- 5
+false_positive_rate <- 0.09
+false_negative_rate <- 0.05
+error_threshold <- 0.8
+```
+
+
+```{r}
+
+# Function to simulate errors based on false positive and false negative rates
+simulate_errors <- function(num_requests, false_positive_rate, false_negative_rate) {
+  errors <- numeric(num_requests)
+```
+
+```{r}
+  
+  # Simulate errors for human requests
+  errors[1:lambda_human] <- sample(c(0, 1), size = lambda_human, prob = c(1 - false_positive_rate, false_positive_rate), replace = TRUE)
+```
+
+```{r}
+  # Simulate errors for bot requests
+  errors[(lambda_human + 1):(lambda_human + lambda_bot)] <- sample(c(0, 1), size = lambda_bot, prob = c(1 - false_negative_rate, false_negative_rate), replace = TRUE)
+  
+  return(errors)
+}
+```
+
+  
+```{r}
+# Simulate errors for both human and bot requests
+errors <- simulate_errors(lambda_human + lambda_bot, false_positive_rate, false_negative_rate)
+```
+
+```{r}
+# Plot the probability mass function of the number of errors per minute for both requests
+barplot(table(errors), names.arg = 0:max(errors), xlab = "Number of Errors", ylab = "Frequency",
+        main = "Probability Mass Function of Errors per Minute", col = "blue")
+```
+
+
+
