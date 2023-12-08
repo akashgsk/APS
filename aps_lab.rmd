@@ -1,0 +1,147 @@
+---
+editor_options:
+  chunk_output_type: inline
+output: pdf_document
+---
+
+Please change the format, variable names, a few code lines before showing to sir. 
+This is the correct answer.
+1.
+{r}
+p_guilty = 0.75
+p_innocent = 1 - p_guilty
+prg = 1 - 0.2 #juror right if guilty
+pri = 1 - 0.1 #juror right if innocent
+n = 12
+min_votes = 9
+
+
+
+
+{r}
+#probability of a correct decision if the defendant is guilty
+pcg = dbinom(min_votes:n, n, prg)
+pcg
+
+
+{r}
+#probability of a correct decision if the defendant is innocent
+
+pci = dbinom(min_votes:n, n, pri)
+pci
+
+
+{r}
+#probability that the court is correct
+pcc = pcg*p_guilty + pci*p_innocent
+pcc
+sum(pcc)
+
+
+This question is different for you. 
+2.
+
+
+{r}
+install.packages("ggplot2")
+
+
+
+{r}
+library(ggplot2)
+
+
+{r}
+n_days = 100000
+n_customers_avg = 30
+n_items_avg = c(10, 20, 5)
+age_group_probs = c(0.2, 0.35, 0.45)
+
+
+
+{r}
+# counter
+n350 = 0
+
+
+for (i in 1:n_days) {
+  # number of customers
+  n_customers = rpois(1, n_customers_avg)
+  
+  # age group of each customer
+  age_groups = sample(0:2, n_customers, replace = TRUE, prob = age_group_probs)
+  
+  # the number of items each customer buys
+  n_items = rpois(n_customers, n_items_avg[age_groups + 1])
+  
+  # the total number of items sold
+  total_items = sum(n_items)
+  
+ 
+  if (total_items > 350) {
+    n350 = n350 + 1
+  }
+}
+
+#probability 
+p350 = mean(n350)/n_days 
+p350
+
+{r}
+ggplot(df, aes(total_items)) +
+  geom_histogram(binwidth = 10, fill = "lightblue", color = "black") +
+  labs(title = "Distribution of Total Items Sold in a Day", x = "Total Items Sold", y = "Frequency")
+
+
+
+
+{r}
+
+
+
+{r}
+
+
+
+{r}
+
+
+
+{r}
+
+
+
+{r}
+
+
+
+{r}
+
+
+
+{r}
+
+
+
+{r}
+
+
+
+{r}
+
+
+
+{r}
+
+
+
+{r}
+
+
+
+{r}
+
+
+
+{r}
+
